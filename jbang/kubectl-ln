@@ -1,0 +1,29 @@
+#!/usr/bin/env jbang
+//DEPS info.picocli:picocli:4.5.0
+//DEPS io.fabric8:kubernetes-client:5.12.1
+
+import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+
+import java.util.concurrent.Callable;
+
+@Command(name = "KubectlLn", mixinStandardHelpOptions = true, version = "KubectlLn 0.1",
+        description = "List nodes")
+class KubectlLn implements Callable<Integer> {
+
+    public static void main(String... args) {
+        int exitCode = new CommandLine(new KubectlLn()).execute(args);
+        System.exit(exitCode);
+    }
+
+    @Override
+    public Integer call() throws Exception {
+        try (KubernetesClient kc = new DefaultKubernetesClient()) {
+            System.out.println("List of nodes:");
+            kc.nodes().list().getItems().forEach(n -> System.out.printf("%s%n", n.getMetadata().getName()));
+        }
+        return 0;
+    }
+}
