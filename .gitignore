@@ -1,6 +1,7 @@
 /build
 /target
 /.idea
+/**/.mvn/wrapper/maven-wrapper.jar
 
 # misc
 .DS_Store
